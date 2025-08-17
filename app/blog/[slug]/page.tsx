@@ -1,7 +1,11 @@
-import type { PageProps, Metadata } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getPostBySlug } from "@/lib/posts";
 import { markdownToHtml } from "@/lib/markdown";
+
+type Props = {
+  params: Promise<{ slug: string }>;
+};
 
 export const dynamicParams = false;
 
@@ -10,19 +14,15 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata(
-  { params }: PageProps<{ slug: string }>
-): Promise<Metadata> {
-  const { slug } = await params; // ✅ Next 15: params는 Promise
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params; // Next.js 15: params는 Promise
   const post = await getPostBySlug(slug);
   if (!post) return {};
   return { title: post.meta.title, description: post.meta.summary ?? "" };
 }
 
-export default async function PostPage(
-  { params }: PageProps<{ slug: string }>
-) {
-  const { slug } = await params; // ✅ Next 15: params는 Promise
+export default async function PostPage({ params }: Props) {
+  const { slug } = await params; // Next.js 15: params는 Promise
   const post = await getPostBySlug(slug);
   if (!post) return notFound();
   const html = await markdownToHtml(post.content);
