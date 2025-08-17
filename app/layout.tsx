@@ -4,7 +4,11 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "경제 블로그",
-  description: "Next.js + Markdown 기반 초간단 블로그",
+  description: "경제/시장 메모와 인사이트",
+  verification: {
+    google: "MYvtRKPb2v1", // Search Console에서 받은 content 값
+    other: { "naver-site-verification": "82d7b073ce972a2e57e007f32729359c273c1392" },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
