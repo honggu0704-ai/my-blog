@@ -1,3 +1,4 @@
+import type { PageProps, Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getPostBySlug } from "@/lib/posts";
 import { markdownToHtml } from "@/lib/markdown";
@@ -9,14 +10,20 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string }}) {
-  const post = await getPostBySlug(params.slug);
+export async function generateMetadata(
+  { params }: PageProps<{ slug: string }>
+): Promise<Metadata> {
+  const { slug } = await params; // ✅ Next 15: params는 Promise
+  const post = await getPostBySlug(slug);
   if (!post) return {};
-  return { title: post.meta.title, description: post.meta.summary || "" };
+  return { title: post.meta.title, description: post.meta.summary ?? "" };
 }
 
-export default async function PostPage({ params }: { params: { slug: string }}) {
-  const post = await getPostBySlug(params.slug);
+export default async function PostPage(
+  { params }: PageProps<{ slug: string }>
+) {
+  const { slug } = await params; // ✅ Next 15: params는 Promise
+  const post = await getPostBySlug(slug);
   if (!post) return notFound();
   const html = await markdownToHtml(post.content);
 
