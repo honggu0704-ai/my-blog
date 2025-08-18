@@ -1,4 +1,6 @@
-// 항상 노출되는 고정 사이드바 (토글/오버레이 없음)
+"use client";
+
+import { useEffect, useState } from "react";
 
 const ITEMS = [
   "에너지",
@@ -15,21 +17,43 @@ const ITEMS = [
 ];
 
 export default function Sidebar() {
+  const [selected, setSelected] = useState<string>("");
+
+  // 선택 유지(선택 항목 기억)
+  useEffect(() => {
+    const v = localStorage.getItem("sb-selected");
+    if (v) setSelected(v);
+  }, []);
+  useEffect(() => {
+    if (selected) localStorage.setItem("sb-selected", selected);
+  }, [selected]);
+
   return (
     <aside
-      className="fixed left-4 top-1/2 -translate-y-1/2 z-40 w-64"
       aria-label="섹터 목록"
+      className="fixed left-6 top-1/2 -translate-y-1/2 z-40 select-none"
     >
-      {/* 흰색 라운드 사각형 컨테이너 (투명 배경 + 흰색 테두리) */}
-      <div className="rounded-2xl border border-white/25 p-4">
-        <ul className="space-y-2">
-          {ITEMS.map((label) => (
-            <li key={label} className="select-none text-white text-sm">
-              {label}
+      <ul className="space-y-6"> {/* 넓직한 간격 */}
+        {ITEMS.map((label) => {
+          const active = selected === label;
+          return (
+            <li key={label}>
+              <button
+                onClick={() => setSelected(label)}
+                className={[
+                  "block text-base tracking-wide transition",
+                  "pl-4 border-l-2",                       // 왼쪽 라인
+                  active ? "opacity-100 font-semibold border-white"
+                         : "opacity-70 hover:opacity-100 border-white/20",
+                ].join(" ")}
+                aria-pressed={active}
+              >
+                {label}
+              </button>
             </li>
-          ))}
-        </ul>
-      </div>
+          );
+        })}
+      </ul>
     </aside>
   );
 }
