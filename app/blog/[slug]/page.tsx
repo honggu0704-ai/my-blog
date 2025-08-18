@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllSlugs, getPostBySlug } from "@/lib/posts";
-import { markdownToHtml } from "@/lib/markdown";
+import { getAllSlugs, getPostBySlug } from "../../../lib/posts";
+import { markdownToHtml } from "../../../lib/markdown";
+
 
 type Props = { params: Promise<{ slug: string }> };
 

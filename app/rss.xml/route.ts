@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAllPostsMeta } from "@/lib/posts";
+import { getAllPostsMeta } from "../../lib/posts";
+
 
 export async function GET() {
   const site = process.env.NEXT_PUBLIC_SITE_URL ?? "https://my-blog-ochre-alpha.vercel.app";
