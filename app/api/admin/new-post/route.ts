@@ -2,14 +2,13 @@
 export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";
-import { createOrUpdateFile } from "@/lib/github";
-import { isAdminByCookie } from "@/lib/auth";
+import { createOrUpdateFile } from "../../../../lib/github";
+import { isAdminByCookie } from "../../../../lib/auth";
 
 export async function POST(req: Request) {
   try {
     const { password, title, slug, date, summary, tags, body } = await req.json();
 
-    // ✅ 쿠키 또는 비번 둘 중 하나로 인증
     const cookieOK = await isAdminByCookie();
     const bodyOK = !!process.env.ADMIN_PASSWORD && password === process.env.ADMIN_PASSWORD;
     if (!cookieOK && !bodyOK) {
