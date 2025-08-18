@@ -1,9 +1,10 @@
-// app/admin/page.tsx (서버 컴포넌트)
+// app/admin/page.tsx
 import { redirect } from "next/navigation";
 import { isAdminByCookie } from "../../lib/auth";
 import AdminEditor from "../../components/AdminEditor";
 
-export default function AdminPage() {
-  if (!isAdminByCookie()) redirect("/login");
+export default async function AdminPage() {
+  const isAdmin = await isAdminByCookie();
+  if (!isAdmin) redirect("/login");
   return <AdminEditor />;
 }

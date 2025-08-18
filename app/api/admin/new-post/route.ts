@@ -1,5 +1,4 @@
 // app/api/admin/new-post/route.ts
-// 서버 런타임(버퍼 사용) 보장
 export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";
@@ -10,16 +9,13 @@ export async function POST(req: Request) {
   try {
     const { password, title, slug, date, summary, tags, body } = await req.json();
 
-    // 인증: (1) 관리자 쿠키 있거나 (2) 비밀번호 일치하면 허용
-    const cookieOK = isAdminByCookie();
-    const bodyOK =
-      !!process.env.ADMIN_PASSWORD && password === process.env.ADMIN_PASSWORD;
-
+    // ✅ 쿠키 또는 비번 둘 중 하나로 인증
+    const cookieOK = await isAdminByCookie();
+    const bodyOK = !!process.env.ADMIN_PASSWORD && password === process.env.ADMIN_PASSWORD;
     if (!cookieOK && !bodyOK) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    // 필수값 체크
     if (!title || !body) {
       return NextResponse.json({ ok: false, error: "title and body are required" }, { status: 400 });
     }
@@ -31,20 +27,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "Server not configured" }, { status: 500 });
     }
 
-    // 슬러그 결정
     const safeSlug = (slug && String(slug).trim()) || toSlug(title);
     const filePath = `content/posts/${safeSlug}.md`;
 
-    // 프론트매터 + 본문 구성
     const fm = frontMatter({
       title,
       date: date || new Date().toISOString().slice(0, 10),
       summary: summary || "",
       tags: parseTags(tags),
     });
+
     const content = `${fm}\n\n${body}\n`;
 
-    // GitHub 커밋(파일 생성/갱신)
     await createOrUpdateFile({
       owner,
       repo,
@@ -60,7 +54,6 @@ export async function POST(req: Request) {
   }
 }
 
-// 유틸들
 function toSlug(s: string) {
   return s
     .toLowerCase()

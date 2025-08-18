@@ -8,7 +8,9 @@ export function adminHash() {
   return createHash("sha256").update(`${pwd}:${salt}`).digest("hex");
 }
 
-export function isAdminByCookie() {
-  const v = cookies().get("admin")?.value;
+// ✅ Next.js 15: cookies()는 Promise → await 필요
+export async function isAdminByCookie() {
+  const jar = await cookies();
+  const v = jar.get("admin")?.value;
   return !!v && v === adminHash();
 }
