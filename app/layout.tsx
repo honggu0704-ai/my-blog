@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Noto_Sans_KR, Playfair_Display } from "next/font/google";
 // ✅ 사이드바 임포트
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "../components/Sidebar";
 
 const noto = Noto_Sans_KR({
   weight: ["400","500","700"],
