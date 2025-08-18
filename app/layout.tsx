@@ -1,6 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Noto_Sans_KR, Playfair_Display } from "next/font/google";
+// ✅ 사이드바 임포트
+import Sidebar from "@/components/Sidebar";
 
 const noto = Noto_Sans_KR({
   weight: ["400","500","700"],
@@ -23,9 +25,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      {/* 본문은 Noto Sans */}
       <body className={noto.className}>
-        {/* ▼ 밑에 흰 줄(보더) 제거: border-b 삭제 */}
+        {/* ✅ 사이드바를 헤더 위에 장착 */}
+        <Sidebar />
+
+        {/* ▼ 밑 흰줄(보더) 제거된 헤더 */}
         <header className="sticky top-0 z-10 bg-black/70 backdrop-blur">
           <nav className="mx-auto max-w-4xl px-4 py-4">
             <div className="flex items-center justify-end">
