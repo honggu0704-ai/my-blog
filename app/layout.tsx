@@ -1,32 +1,39 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Noto_Sans_KR } from "next/font/google";
+
+const noto = Noto_Sans_KR({
+  weight: ["400","500","700"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "경제 블로그",
   description: "경제/시장 메모와 인사이트",
-  verification: {
-    google: "MYvtRKPb2v1", // Search Console에서 받은 content 값
-    other: { "naver-site-verification": "82d7b073ce972a2e57e007f32729359c273c1392" },
-  },
+  // verification: { google: "구글코드", other: { "naver-site-verification": "네이버코드" } },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body>
-        <header className="sticky top-0 z-10 border-b bg-white/80 backdrop-blur">
-          <nav className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-            <Link className="font-semibold" href="/">경제 블로그</Link>
-            <div className="space-x-4 text-sm">
-              <Link href="/blog">블로그</Link>
+      <body className={noto.className}>
+        {/* 우측 상단 타이틀만 남김 */}
+        <header className="sticky top-0 z-10 border-b border-white/10 bg-black/70 backdrop-blur">
+          <nav className="mx-auto max-w-4xl px-4 py-4">
+            <div className="flex items-center justify-end">
+              <span className="font-extrabold tracking-tight text-3xl sm:text-4xl md:text-5xl">
+                Finance Report
+              </span>
             </div>
           </nav>
         </header>
-        <main className="mx-auto max-w-3xl px-4 py-8">{children}</main>
-        <footer className="mx-auto max-w-3xl px-4 py-10 text-sm text-gray-500">
-          © {new Date().getFullYear()} 경제 블로그 · 본 콘텐츠는 투자 조언이 아닙니다.
-        </footer>
+
+        {/* 본문은 기본 레이아웃만, 텍스트는 각 페이지에서 제거 */}
+        <main>{children}</main>
+
+        {/* 푸터 텍스트 제거(빈 영역) */}
+        <footer className="mx-auto max-w-3xl px-4 py-8" />
       </body>
     </html>
   );

@@ -3,9 +3,7 @@ import { notFound } from "next/navigation";
 import { getAllSlugs, getPostBySlug } from "@/lib/posts";
 import { markdownToHtml } from "@/lib/markdown";
 
-type Props = {
-  params: Promise<{ slug: string }>;
-};
+type Props = { params: Promise<{ slug: string }> };
 
 export const dynamicParams = false;
 
@@ -15,25 +13,24 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params; // Next.js 15: params는 Promise
+  const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return {};
-  return { title: post.meta.title, description: post.meta.summary ?? "" };
+  return {
+    title: "Finance Report", // 탭 제목도 단일화
+    description: "",
+  };
 }
 
 export default async function PostPage({ params }: Props) {
-  const { slug } = await params; // Next.js 15: params는 Promise
+  const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return notFound();
   const html = await markdownToHtml(post.content);
 
   return (
-    <article className="prose prose-zinc max-w-none">
-      <h1>{post.meta.title}</h1>
-      <p className="text-sm text-gray-500">
-        {new Date(post.meta.date).toLocaleDateString("ko-KR")}
-        {post.meta.tags?.length ? " · " + post.meta.tags.join(", ") : ""}
-      </p>
+    <article className="space-y-4 leading-7">
+      {/* 제목/날짜/태그 등 모든 텍스트 요소 제거, 본문만 남김 */}
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </article>
   );

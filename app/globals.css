@@ -2,5 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #__next { height: 100%; }
-.prose h1, .prose h2, .prose h3 { scroll-margin-top: 80px; }
+/* 다크 테마 고정 */
+:root { color-scheme: dark; }
+html, body { @apply bg-black text-white; }
+
+/* 링크는 흰색. 기본적으로 밑줄 제거 */
+a { @apply text-white no-underline; }
+
+/* 콘텐츠 폭 */
+main { @apply mx-auto max-w-3xl px-4 py-8; }
+
+/* 카드 유틸 (텍스트는 렌더하지 않지만 박스 형태는 유지) */
+.card { @apply rounded-2xl border border-white/15 hover:bg-white/5 transition; }
