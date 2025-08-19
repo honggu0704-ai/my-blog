@@ -2,7 +2,7 @@
 export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";
-import { createOrUpdateFile } from "../../../../lib/github";
+import { createOrUpdateFileContents } from "../../../../lib/github"; // ✅ 새 함수
 import { isAdminByCookie } from "../../../../lib/auth";
 import { isValidSector } from "../../../../lib/sector";
 
@@ -17,18 +17,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
 
+    // 유효성
     if (!title || !body) {
       return NextResponse.json({ ok: false, error: "title and body are required" }, { status: 400 });
     }
-    if (!sector || !isValidSector(String(sector))) {
+    if (sector && !isValidSector(String(sector))) {
       return NextResponse.json({ ok: false, error: "invalid sector" }, { status: 400 });
-    }
-
-    const owner = process.env.GITHUB_OWNER!;
-    const repo = process.env.GITHUB_REPO!;
-    const branch = process.env.GITHUB_BRANCH || "main";
-    if (!owner || !repo || !process.env.GITHUB_TOKEN) {
-      return NextResponse.json({ ok: false, error: "Server not configured" }, { status: 500 });
     }
 
     const safeSlug = (slug && String(slug).trim()) || toSlug(title);
@@ -39,18 +33,17 @@ export async function POST(req: Request) {
       date: (date && String(date)) || new Date().toISOString().slice(0, 10),
       summary: summary || "",
       tags: parseTags(tags),
-      sector: String(sector),
+      sector: sector ? String(sector) : "",
     });
 
     const content = `${fm}\n\n${body}\n`;
 
-    await createOrUpdateFile({
-      owner,
-      repo,
+    // ✅ Base64로 인코딩해서 새 헬퍼 호출
+    const base64 = Buffer.from(content, "utf8").toString("base64");
+    await createOrUpdateFileContents({
       path: filePath,
-      content,
+      contentBase64: base64,
       message: `post: ${safeSlug}`,
-      branch,
     });
 
     return NextResponse.json({ ok: true, slug: safeSlug, path: filePath });
