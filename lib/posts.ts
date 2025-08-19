@@ -12,17 +12,14 @@ export type PostMeta = {
   date: string;
   summary?: string;
   tags?: string[];
-  sector?: string;   // "energy" 등
-  cover?: string;
+  sector?: string; // "energy" 등
+  file?: string;   // "/files/<slug>/<filename>"
 };
 
 export async function getAllSlugs(): Promise<string[]> {
   try {
     const files = await fs.readdir(POSTS_DIR);
-    return files
-      .filter((f) => f.endsWith(".md"))
-      .map((f) => f.replace(/\.md$/, ""))
-      .sort();
+    return files.filter((f) => f.endsWith(".md")).map((f) => f.replace(/\.md$/, "")).sort();
   } catch {
     return [];
   }
@@ -35,7 +32,6 @@ export async function getAllPostsMeta(): Promise<PostMeta[]> {
     const p = await getPostBySlug(slug);
     if (p) metas.push(p.meta);
   }
-  // 최신 날짜 우선
   metas.sort((a, b) => (a.date > b.date ? -1 : 1));
   return metas;
 }
@@ -53,9 +49,8 @@ export async function getPostBySlug(slug: string): Promise<{ meta: PostMeta; con
       summary: data.summary ?? "",
       tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
       sector: data.sector ? String(data.sector) : "",
-      cover: data.cover ? String(data.cover) : undefined,
+      file: data.file ? String(data.file) : undefined,
     };
-
     return { meta, content };
   } catch {
     return null;

@@ -14,9 +14,7 @@ export const SECTORS = [
 ] as const;
 
 export type SectorValue = typeof SECTORS[number]["value"];
-
 export const isValidSector = (v: string): v is SectorValue =>
-  SECTORS.some(s => s.value === v);
-
+  SECTORS.some((s) => s.value === v);
 export const sectorLabel = (v: string) =>
-  SECTORS.find(s => s.value === v)?.label ?? v;
+  SECTORS.find((s) => s.value === v)?.label ?? v;
