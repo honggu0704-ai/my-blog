@@ -4,11 +4,10 @@ import { notFound } from "next/navigation";
 import { getAllSlugs, getPostBySlug } from "../../../lib/posts";
 import { markdownToHtml } from "../../../lib/markdown";
 
-// ✅ 새 슬러그도 허용 (이 줄이 핵심)
+// ✅ 새 슬러그도 허용
 export const dynamicParams = true;
-
-// (선택) 항상 최신으로 렌더하고 싶으면 주석 해제
-// export const revalidate = 0;
+// ✅ 캐시 끔(새 커밋 직후에도 바로 반영)
+export const revalidate = 0;
 
 export async function generateStaticParams() {
   const slugs = await getAllSlugs();
