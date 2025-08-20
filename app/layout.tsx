@@ -21,7 +21,7 @@ const headline = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "경제 블로그",
+  title: "전홍구의 경제블로그",
   description: "경제/시장 메모와 인사이트",
 };
 

@@ -18,9 +18,9 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
   <rss version="2.0">
     <channel>
-      <title>경제 블로그</title>
+      <title>전홍구의 경제블로그</title>
       <link>${site}</link>
-      <description>경제 블로그 RSS</description>
+      <description>전홍구의 경제블로그 RSS</description>
       ${items}
     </channel>
   </rss>`;
