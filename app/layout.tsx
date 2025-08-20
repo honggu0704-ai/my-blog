@@ -23,6 +23,8 @@ const headline = Playfair_Display({
 export const metadata: Metadata = {
   title: "전홍구의 경제블로그",
   description: "경제/시장 메모와 인사이트",
+  openGraph: { title: "전홍구의 경제블로그", description: "경제/시장 메모와 인사이트" },
+  twitter:   { title: "전홍구의 경제블로그", description: "경제/시장 메모와 인사이트" },
 };
 
 // ✅ 레이아웃을 async로 바꾸고 쿠키 체크를 await
@@ -37,7 +39,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <header className="sticky top-0 z-10 bg-black/70 backdrop-blur">
             <nav className="mx-auto max-w-4xl px-4 py-4">
               <div className="flex items-center justify-end">
-                <span className={`${headline.className} text-4xl sm:text-5xl md:text-6xl font-normal leading-none`}>
+                <span className={`${headline.className} ...`}>전홍구의 경제블로그</span>
+
                   Finance Report
                 </span>
               </div>
